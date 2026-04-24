@@ -1,38 +1,61 @@
 # FoliaLib Complete Quick Reference
 
-## Project Setup
+## REQUIRED SETUP (DO THESE FIRST — DO NOT SKIP)
 
-### Adding FoliaLib to Your Project
+**Step 1: Add `folia-supported: true` to `plugin.yml`**
 
-In your manifest.kod file, add folialib to the include section:
+This is MANDATORY. Without this line, the plugin will not load on Folia servers even if FoliaLib is included. This must be in your plugin.yml:
 
-manifest.kod:
+```yaml
+name: MyPlugin
+version: 1.0
+main: com.example.MyPlugin
+api-version: '1.21'
+folia-supported: true
+```
+
+**Step 2: Add `folialib` to `manifest.kod`**
+
+FoliaLib is a shaded library. It MUST be included in your manifest.kod to be bundled into your plugin JAR:
+
+```yaml
 include:
- - folialib
+  - folialib
+```
 
-This will automatically include FoliaLib in your project compilation.
+Without this, imports like `com.tcoded.folialib.FoliaLib` will fail at runtime with `ClassNotFoundException`.
 
-### Imports
+**Both steps are required. Neither is optional. Do these before writing any FoliaLib code.**
+
+---
+
+## Imports
+
+```java
 import com.tcoded.folialib.FoliaLib;
 import com.tcoded.folialib.wrapper.task.WrappedTask;
 import com.tcoded.folialib.enums.EntityTaskResult;
+```
 
 ## Initialization
 
 In your main plugin class:
+
+```java
 public class MyPlugin extends JavaPlugin {
-   private FoliaLib foliaLib;
-   
-   @Override
-   public void onEnable() {
-       foliaLib = new FoliaLib(this);
-   }
-   
-   @Override
-   public void onDisable() {
-       foliaLib.getScheduler().cancelAllTasks();
-   }
+    private FoliaLib foliaLib;
+
+    @Override
+    public void onEnable() {
+        foliaLib = new FoliaLib(this);
+    }
+
+    @Override
+    public void onDisable() {
+        foliaLib.getScheduler().cancelAllTasks();
+    }
 }
+```
 
 ## Complete Method Reference
 
